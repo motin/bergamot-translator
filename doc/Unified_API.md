@@ -14,7 +14,7 @@ class **AbstractTranslationModel** {
 	The API splits each text entry into sentences internally, which are then translated independent of each other. The translated sentences are then joined together and returned in TranslationResult.
 	Please refer to the TranslationRequest class to find out what additional information can be requested. The alignment information can only be requested if the model supports it (check isAlignmentSupported() API).
 	*/
-	virtual std::vector<std::future<TranslationResult>> translate(std::vector<std::string> texts, TranslationRequest request) = 0;
+	virtual std::future<std::vector<TranslationResult>> translate(std::vector<std::string>&& texts, TranslationRequest request) = 0;
 
 	/* Check if the model can provide alignment information b/w original and translated text. */
 	virtual bool isAlignmentSupported() const = 0;
