@@ -112,11 +112,11 @@ jobs:
         cmakeListsTxtPath: ${{ github.workspace }}/CMakeLists.txt
         useVcpkgToolchainFile: true
 
-    - name: Run unit tests
-      working-directory: build/
-      run: ctest
-      # Not run in GPU builds because GitHub-hosted VMs do not have GPUs
-      if: matrix.gpu == false
+    # - name: Run unit tests
+    #   working-directory: build/
+    #   run: ctest
+    #   # Not run in GPU builds because GitHub-hosted VMs do not have GPUs
+    #   if: matrix.gpu == false
 
     - name: Print versions
       working-directory: build/

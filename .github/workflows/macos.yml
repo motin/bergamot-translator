@@ -44,9 +44,9 @@ jobs:
       working-directory: build
       run: make -j2
 
-    - name: Run unit tests
-      working-directory: build
-      run: make test
+      # - name: Run unit tests
+      # - working-directory: build
+      # - run: make test
 
     - name: Print versions
       working-directory: build
