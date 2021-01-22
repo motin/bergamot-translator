@@ -74,7 +74,7 @@ jobs:
 
     # The script simplifies installation of different versions of CUDA
     - name: Install CUDA
-      run: ./scripts/ci/install_cuda_ubuntu.sh ${{ matrix.cuda }}
+      run: ./3rd_party/marian-dev/scripts/ci/install_cuda_ubuntu.sh ${{ matrix.cuda }}
       if: matrix.gpu == true
 
     # Boost is installed on GitHub-hosted runners in a non-standard location
