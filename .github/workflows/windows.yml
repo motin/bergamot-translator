@@ -19,9 +19,9 @@ jobs:
             cuda: ""
             gpu: false
           # Windows CPU+GPU build
-          - name: "Windows CPU+CUDA"
-            cuda: "10.2"
-            gpu: true
+          # - name: "Windows CPU+CUDA"
+          #   cuda: "10.2"
+          #   gpu: true
 
     runs-on: windows-2019
     name: ${{ matrix.name }}
