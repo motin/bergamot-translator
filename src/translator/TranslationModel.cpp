@@ -16,7 +16,7 @@
 std::shared_ptr<marian::Options> parseOptions(const std::string &config) {
   marian::Options options;
 
-  // @TODO(jerinphilip) There's something off here, @XapaXapaJIaMnu suggests
+  // @TODO(jerinphilip) There's something off here, @XapaJIaMnu suggests
   // that should not be using the defaultConfig. This function only has access
   // to std::string config and needs to be able to construct Options from the
   // same.
@@ -63,7 +63,7 @@ TranslationModel::translate(std::vector<std::string> &&texts,
   auto convert = [](marian::bergamot::TranslationResult &mTranslationResult) {
     // Change marian::string_view to std::string_view
     TranslationResult::SentenceMappings sentenceMappings;
-    for (auto &p : sentenceMappings) {
+    for (auto &p : mTranslationResult.getSentenceMappings()) {
       std::string_view src(p.first.data(), p.first.size()),
           tgt(p.second.data(), p.second.size());
       sentenceMappings.emplace_back(src, tgt);
