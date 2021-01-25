@@ -6,6 +6,8 @@
 #include <future>
 #include <vector>
 
+#include "3rd_party/marian-dev/src/3rd_party/yaml-cpp/yaml.h"
+#include "3rd_party/marian-dev/src/common/config_parser.h"
 #include "TranslationModel.h"
 #include "common/config_validator.h"
 #include "common/options.h"
@@ -13,6 +15,10 @@
 
 std::shared_ptr<marian::Options> parseOptions(const std::string &config) {
   marian::Options options;
+  marian::ConfigParser configParser(marian::cli::mode::translation);
+
+  const YAML::Node &defaultConfig = configParser.getConfig();
+  options.merge(defaultConfig);
   options.parse(config);
   YAML::Node configCopy = options.cloneToYamlNode();
   marian::ConfigValidator validator(configCopy);
