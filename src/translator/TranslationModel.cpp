@@ -15,14 +15,34 @@
 
 std::shared_ptr<marian::Options> parseOptions(const std::string &config) {
   marian::Options options;
-  marian::ConfigParser configParser(marian::cli::mode::translation);
 
+  // @TODO(jerinphilip) There's something off here, @XapaXapaJIaMnu suggests
+  // that should not be using the defaultConfig. This function only has access
+  // to std::string config and needs to be able to construct Options from the
+  // same.
+
+  // Absent the following code-segment, there is a parsing exception thrown on
+  // rebuilding YAML.
+  //
+  // Error: Unhandled exception of type 'N4YAML11InvalidNodeE': invalid node;
+  // this may result from using a map iterator as a sequence iterator, or
+  // vice-versa
+  //
+  // Error: Aborted from void unhandledException() in
+  // 3rd_party/marian-dev/src/common/logging.cpp:113
+
+  marian::ConfigParser configParser(marian::cli::mode::translation);
   const YAML::Node &defaultConfig = configParser.getConfig();
+
   options.merge(defaultConfig);
+
+  // Parse configs onto defaultConfig.
   options.parse(config);
   YAML::Node configCopy = options.cloneToYamlNode();
+
   marian::ConfigValidator validator(configCopy);
   validator.validateOptions(marian::cli::mode::translation);
+
   return std::make_shared<marian::Options>(options);
 }
 
