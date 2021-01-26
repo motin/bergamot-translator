@@ -13,7 +13,7 @@ namespace marian {
 namespace bergamot {
 class TranslationResult {
 public:
-  TranslationResult(std::string &&source, Segments &&segments,
+  TranslationResult(std::string &&source,
                     std::vector<TokenRanges> &&sourceRanges,
                     Histories &&histories,
                     std::vector<Ptr<Vocab const>> &vocabs);
@@ -21,20 +21,26 @@ public:
   // Returns const references to source and translated texts, for external
   // consumption.
 
-  const std::string &getOriginalText() const { return source_; }
-  const std::string &getTranslatedText() const { return translation_; }
+  const std::string getOriginalText() const { return source_; }
+  const std::string getTranslatedText() const { return translation_; }
 
   // A mapping of string_views in the source_ and translation_ are provide as a
   // pair for external consumption. Each entry corresponding
   // to a (source-sentence, target-sentence).
 
-  typedef std::vector<std::pair<string_view, string_view>> SentenceMappings;
+  typedef std::vector<std::pair<const string_view, const string_view>>
+      SentenceMappings;
   const SentenceMappings &getSentenceMappings() const {
-    for (auto &p : sentenceMappings_) {
-      std::cout << "getSentenceMappings [src] " << p.first << std::endl;
-      std::cout << "getSentenceMappings [tgt] " << p.second << std::endl;
-    }
     return sentenceMappings_;
+  }
+
+  void debugSentenceMappings(const char *s) const {
+    std::cout << std::endl;
+    for (auto &p : sentenceMappings_) {
+      std::cout << s << " [src] " << p.first << std::endl;
+      std::cout << s << " [tgt] " << p.second << std::endl;
+    }
+    std::cout << std::endl;
   }
 
   // Return the Quality scores of the translated text.
@@ -57,16 +63,12 @@ private:
   // Future hook to gain alignments.
   Histories histories_;
 
-  // Can be removed eventually.
-  Segments segments_;
-  std::vector<Ptr<Vocab const>> *vocabs_;
-
   // string_views at the token level.
   std::vector<TokenRanges> sourceRanges_;
 
   // string_views at the sentence-level.
-  std::vector<string_view> sourceMappings_;
-  std::vector<string_view> targetMappings_;
+  // std::vector<string_view> sourceMappings_;
+  // std::vector<string_view> targetMappings_;
 };
 } // namespace bergamot
 } // namespace marian
