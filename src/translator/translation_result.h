@@ -60,6 +60,9 @@ public:
   // For development use to benchmark with marian-decoder.
   const Histories &getHistories() const { return histories_; }
 
+  // @jerinphilip: Why are these members no longer-private? For move-semantics
+  // with consistent string_views for bergamot-translator.
+
   std::string source_;
   std::string translation_;
   // Adding the following to complete bergamot-translator spec, redundant while
@@ -75,10 +78,6 @@ private:
 
   // string_views at the token level.
   std::vector<TokenRanges> sourceRanges_;
-
-  // string_views at the sentence-level.
-  // std::vector<string_view> sourceMappings_;
-  // std::vector<string_view> targetMappings_;
 };
 } // namespace bergamot
 } // namespace marian
