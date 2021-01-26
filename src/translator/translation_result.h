@@ -44,15 +44,6 @@ public:
     return sentenceMappings_;
   }
 
-  void debugSentenceMappings(const char *s) const {
-    std::cout << std::endl;
-    for (auto &p : sentenceMappings_) {
-      std::cout << s << " [src] " << p.first << std::endl;
-      std::cout << s << " [tgt] " << p.second << std::endl;
-    }
-    std::cout << std::endl;
-  }
-
   // Return the Quality scores of the translated text.
   // Not implemented currently, commenting out.
   // const QualityScore &getQualityScore() const { return qualityScore; }
