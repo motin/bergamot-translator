@@ -18,6 +18,16 @@ public:
                     Histories &&histories,
                     std::vector<Ptr<Vocab const>> &vocabs);
 
+  TranslationResult(TranslationResult &&other)
+      : source_(std::move(other.source_)),
+        translation_(std::move(other.translation_)),
+        sourceRanges_(std::move(other.sourceRanges_)),
+        sentenceMappings_(std::move(other.sentenceMappings_)),
+        histories_(std::move(other.histories_)){};
+
+  TranslationResult(const TranslationResult &) = delete;
+  TranslationResult &operator=(const TranslationResult &) = delete;
+
   // Returns const references to source and translated texts, for external
   // consumption.
 
