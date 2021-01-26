@@ -31,8 +31,8 @@ public:
   // Returns const references to source and translated texts, for external
   // consumption.
 
-  const std::string getOriginalText() const { return source_; }
-  const std::string getTranslatedText() const { return translation_; }
+  const std::string &getOriginalText() const { return source_; }
+  const std::string &getTranslatedText() const { return translation_; }
 
   // A mapping of string_views in the source_ and translation_ are provide as a
   // pair for external consumption. Each entry corresponding
