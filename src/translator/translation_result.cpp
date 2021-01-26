@@ -21,8 +21,9 @@ TranslationResult::TranslationResult(std::string &&source, Segments &&segments,
   for (int i = 0; i < segments_.size(); i++) {
     string_view first = sourceRanges_[i].front();
     string_view last = sourceRanges_[i].back();
-    int size = last.end() - first.begin();
-    sourceMappings_.emplace_back(first.data(), size);
+    sourceMappings_.emplace_back(first.data(), last.end() - first.begin());
+    std::cout << "Reconstructed " << i << ":" << sourceMappings_.back()
+              << std::endl;
   }
 
   // Compiles translations into a single std::string translation_
@@ -32,7 +33,7 @@ TranslationResult::TranslationResult(std::string &&source, Segments &&segments,
   // TODO(jerin): Add token level string_views here as well.
   LOG(info, "Decoding");
   std::vector<std::pair<int, int>> translationRanges;
-  int offset{0}, end{0};
+  size_t offset{0}, end{0}, start{0};
   bool first{true};
   for (auto &history : histories_) {
     // TODO(jerin): Change hardcode of nBest = 1
@@ -45,19 +46,22 @@ TranslationResult::TranslationResult(std::string &&source, Segments &&segments,
       first = false;
     } else {
       translation_ += " ";
+      ++offset;
     }
 
     translation_ += decoded;
-    end = offset + (first ? 0 : 1) /*space*/ + decoded.size();
-    translationRanges.emplace_back(offset, end);
-    offset = end;
+    translationRanges.emplace_back(offset, decoded.size());
+    offset += decoded.size();
   }
 
   // Converting ByteRanges as indices into string_views.
   LOG(info, "generating targetMappings");
   targetMappings_.reserve(translationRanges.size());
   for (auto &p : translationRanges) {
-    targetMappings_.emplace_back(&translation_[p.first], p.second - p.first);
+    const char *begin = &translation_[p.first];
+    targetMappings_.emplace_back(begin, p.second);
+    std::cout << "Reconstructed targetMapping " << targetMappings_.back()
+              << std::endl;
   }
 
   // Surely, let's add sentenceMappings_
@@ -65,6 +69,9 @@ TranslationResult::TranslationResult(std::string &&source, Segments &&segments,
   for (auto p = sourceMappings_.begin(), q = targetMappings_.begin();
        p != sourceMappings_.end() && q != targetMappings_.end(); ++p, ++q) {
     sentenceMappings_.emplace_back(*p, *q);
+    auto &t = sentenceMappings_.back();
+    std::cout << "translationResult [src] " << t.first << std::endl;
+    std::cout << "translationResult [tgt] " << t.second << std::endl;
   }
 }
 

@@ -30,6 +30,10 @@ public:
 
   typedef std::vector<std::pair<string_view, string_view>> SentenceMappings;
   const SentenceMappings &getSentenceMappings() const {
+    for (auto &p : sentenceMappings_) {
+      std::cout << "getSentenceMappings [src] " << p.first << std::endl;
+      std::cout << "getSentenceMappings [tgt] " << p.second << std::endl;
+    }
     return sentenceMappings_;
   }
 
